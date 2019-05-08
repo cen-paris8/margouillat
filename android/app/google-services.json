@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "15383907007",
+    "firebase_url": "https://tracksgame-29058.firebaseio.com",
+    "project_id": "tracksgame-29058",
+    "storage_bucket": "tracksgame-29058.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15383907007:android:58de549bf32e12cc",
+        "android_client_info": {
+          "package_name": "com.sandoka.margouillat.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "15383907007-1810vs7u0hermev1trrra85oj2hne2i2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCd2AS856YhR0GSgJd98LqMfQSdwbh4R5c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15383907007-1810vs7u0hermev1trrra85oj2hne2i2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
