@@ -4,6 +4,8 @@ description: A new Flutter project.
 dependencies:
   flutter:
     sdk: flutter
+  scoped_model:
+  cloud_firestore: ^0.8.2+3
 
 dev_dependencies:
   flutter_test:

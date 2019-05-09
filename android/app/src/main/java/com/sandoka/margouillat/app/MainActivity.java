@@ -1,4 +1,4 @@
-package github.nisrulz.usingbottomnavbar;
+package com.sandoka.margouillat.app;
 
 import android.os.Bundle;
 
