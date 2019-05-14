@@ -1,31 +1,27 @@
 import 'package:flutter/material.dart';
 import 'game_card.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/game_model.dart';
+import '../repositories/game_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:developer';
-import '../providers/firestore_provider.dart';
 
-class GameCatalog extends StatelessWidget {
+class GameCatalogRx extends StatelessWidget {
 
-  final FirestoreProvider _firestoreProvider = new FirestoreProvider();
+  final GameRepository _gameRepository = new GameRepository();
 
   @override
   Widget build(BuildContext context) {
     //GameModel g = new GameModel('toto');
-    debugPrint('Ici');
-    debugger();
+    debugPrint('In GameCatalogRx');
     return new StreamBuilder(
-      //stream: Firestore.instance.collection('games').snapshots(),
-      stream: _firestoreProvider.gameListEvents(),
+      stream: _gameRepository.gameList(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return new Text('Loading..');
         return GridView.count(
           crossAxisCount: 2,
           scrollDirection: Axis.vertical,
-          children: snapshot.data.documents.map<Widget>((document) {
+          children: snapshot.data.map<Widget>((gameModel) {
               return new GameCard(
-                game: new GameModel(document['name'])
+                game: gameModel
               );
             }
           ).toList(),
