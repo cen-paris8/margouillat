@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 import 'game_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/game_model.dart';
@@ -25,7 +26,7 @@ class GameCatalog extends StatelessWidget {
           scrollDirection: Axis.vertical,
           children: snapshot.data.documents.map<Widget>((document) {
               return new GameCard(
-                game: new GameModel(document['name'])
+                game: new Observable<GameModel>.fromFuture(new Future<GameModel>(() => GameModel(document['name'])))
               );
             }
           ).toList(),

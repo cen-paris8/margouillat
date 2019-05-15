@@ -4,9 +4,11 @@ description: A new Flutter project.
 dependencies:
   flutter:
     sdk: flutter
-  scoped_model:
-  rxdart:
-  cloud_firestore: ^0.8.2+3
+  rxdart: 0.22.0
+  cloud_firestore: 0.8.2+3
+  #firebase_storage: 1.1.0+1
+  firebase_storage:
+  path_provider:
 
 dev_dependencies:
   flutter_test:
