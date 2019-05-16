@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import '../models/game_model.dart';
@@ -25,13 +27,12 @@ class GameCard extends StatelessWidget {
               child: Text('${snapshot.data.name}')
               ),
             Expanded( 
-              child: Image.network('${snapshot.data.thumbnailUrl}')
+              //child: Image.network('${snapshot.data.thumbnailUrl}')
+              child: Image.file(File(snapshot.data.thumbnailPath))
               ),
-              /*
               Expanded(
-              child: Text('${snapshot.data.thumbnailUrl}')
+              child: Text('${snapshot.data.thumbnailPath}')
               )
-              */
               ],
             )
           )

@@ -15,9 +15,14 @@ class FirebaseStorageProvider {
     return _instance;
   }
 
+  /*
   Future<String> getFilePath(String httpPath) async {
     final RegExp regExp = RegExp('([^?/]*\.(jpg|mp4|mp3))');
     String fileName = regExp.stringMatch(httpPath);
+    final RegExp regExpDir = RegExp('([^?/]*\)/\.*');
+    String dirPath = regExp.stringMatch(fileName);
+    print(dirPath);
+    //String dirPath = fileName.split('/')
     //String fileName = httpPath.replaceAll('/', '_');
     //String fileName = httpPath
     //final Directory tempDir = Directory.systemTemp;
@@ -29,10 +34,14 @@ class FirebaseStorageProvider {
     String tempPath = await ref.getDownloadURL();
     return tempPath;
   }
-
+  */
+  
   Future<Null> downloadFile(String httpPath, String filePath) async {
     StorageReference ref = FirebaseStorage.instance.ref().child(httpPath);
+    String tempPath = await ref.getDownloadURL();
+    print(tempPath);
     File file = File(filePath);
+    print(filePath);
     // TODO : check if file already exists or is
     /*
     if(file.existsSync()) {
@@ -54,5 +63,10 @@ class FirebaseStorageProvider {
     return '$path/$fileName';
   }
 
+  Future<Directory> createGameArborescence(String gameId) async {
+    Directory appDocDirectory = await getApplicationDocumentsDirectory();
+    return new Directory(appDocDirectory.path + '/' + 'gameId' + '/' + 'public' + '/' + 'thumbnai')
+    .create(recursive: true);
+  }
 
 }
