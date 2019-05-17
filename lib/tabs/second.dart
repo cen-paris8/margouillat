@@ -19,8 +19,6 @@ class _MyAppState extends State<SecondTab> {
   static const String route = '/';
   double lat;
   double long;
-  double latInit;
-  double longInit;
   double latICGoogle;
   double longICGoogle;
   LatLng swboundaryGoo;
@@ -105,8 +103,6 @@ StreamSubscription<LocationData> _locationSubscription;
     //long = _currentLocation != null ? _currentLocation.longitude: longInit;
     lat = _currentLocation != null ? _currentLocation.latitude : latICGoogle;
     long = _currentLocation != null ? _currentLocation.longitude : longICGoogle;
-    latInit = 5.3760500;
-    longInit = -3.9930055;
     latICGoogle = 5.376037;
     longICGoogle = -3.993089;
     swboundaryGoo = LatLng(5.376010, -3.993148);
@@ -120,8 +116,7 @@ StreamSubscription<LocationData> _locationSubscription;
         builder: (ctx) => Container(
               child: Image.asset(
                 'assets/images/cerco.png',
-              ), /*FlutterLogo(colors: Colors.green,),*/
-              //child: Icon(Icons.home),
+              ),
             ),
       ),
       Marker(
