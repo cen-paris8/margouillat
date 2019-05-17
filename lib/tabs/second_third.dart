@@ -1,4 +1,4 @@
-import 'dart:async';
+//import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
@@ -25,7 +25,7 @@ class _MyAppState extends State<SecondTab> {
   LocationData _startLocation;
   LocationData _currentLocation;
 
-StreamSubscription<LocationData> _locationSubscription;
+  //StreamSubscription<LocationData> _locationSubscription;
 
   Location _locationService  = new Location();
   bool _permission = false;
@@ -44,7 +44,6 @@ StreamSubscription<LocationData> _locationSubscription;
   // Platform messages are asynchronous, so we initialize in an async method.
   dynamic initPlatformState() async {
     print('passe dans init');
-
     await _locationService.changeSettings(accuracy: LocationAccuracy.HIGH, interval: 1000);
     
     LocationData location;
@@ -91,18 +90,15 @@ StreamSubscription<LocationData> _locationSubscription;
     setState(() {
         _startLocation = location;
     });
-    
 
   }
 
   @override
   Widget build(BuildContext context) {
-    //lat = _currentLocation != null ? _currentLocation.latitude: latInit;
-    //long = _currentLocation != null ? _currentLocation.longitude: longInit;
-    lat = latInit;
-    long = longInit;
-    latInit = 5.3760500;
-    longInit = -3.9930055;
+    lat = _currentLocation != null ? _currentLocation.latitude: latInit;
+    long = _currentLocation != null ? _currentLocation.longitude: longInit;
+    latInit = 5.3760675;
+    longInit = -3.9930117;
 
     var markers = <Marker>[
       Marker(
@@ -111,7 +107,7 @@ StreamSubscription<LocationData> _locationSubscription;
         point: LatLng(latInit, longInit),
         builder: (ctx) => Container(
               child: Image.asset(
-                'assets/images/cerco.png',
+                'assets/images/map0.jpg',
               ), /*FlutterLogo(colors: Colors.green,),*/
               //child: Icon(Icons.home),
             ),
@@ -151,7 +147,7 @@ StreamSubscription<LocationData> _locationSubscription;
     ];
 
     return Scaffold(
-      // appBar: AppBar(title: Text('Home')),
+      //appBar: AppBar(title: Text('Home')),
       //drawer: buildDrawer(context, route),
       body: Padding(
         padding: EdgeInsets.all(8.0),
@@ -219,7 +215,6 @@ StreamSubscription<LocationData> _locationSubscription;
                 ],
               ),
             ),
-
           ],
         ),
       ),

@@ -4,12 +4,14 @@ description: A new Flutter project.
 dependencies:
   flutter:
     sdk: flutter
-  async: ^2.0.8
+  async:  ^2.1.0
+  # ^2.0.8
   cloud_firestore: ^0.11.0+2
   # 0.8.2+3
   #firebase_storage: 1.1.0+1
   firebase_storage:
-  flutter_map: ^0.5.0+1
+  flutter_map: ^0.5.0 
+  http: ^0.11.3+17
   latlong: ^0.6.1
   location: ^2.3.5
   path_provider:
@@ -39,6 +41,7 @@ flutter:
    - assets/images/map1.jpg
    - assets/images/map2.jpg
    - assets/images/map3.jpg
+   - assets/images/cerco.png
   # - assets/images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
