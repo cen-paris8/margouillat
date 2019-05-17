@@ -21,6 +21,10 @@ class _MyAppState extends State<SecondTab> {
   double long;
   double latInit;
   double longInit;
+  double latICGoogle;
+  double longICGoogle;
+  LatLng swboundaryGoo;
+  LatLng neboundaryGoo;
 
   LocationData _startLocation;
   LocationData _currentLocation;
@@ -61,14 +65,14 @@ StreamSubscription<LocationData> _locationSubscription;
           print('location init: $location.toString()');
 
             await _locationService.changeSettings(accuracy: LocationAccuracy.BALANCED, interval: 1000);
-          //_locationSubscription = 
-          _locationService.onLocationChanged().listen((LocationData result) async {
+          _locationSubscription = _locationService.onLocationChanged().listen((LocationData result) async {
             
             if(mounted){
               setState(() {
                 _currentLocation = result;
               });
             }
+            print('_currentLocation: $_currentLocation');
           });
         }
       } else {
@@ -99,16 +103,20 @@ StreamSubscription<LocationData> _locationSubscription;
   Widget build(BuildContext context) {
     //lat = _currentLocation != null ? _currentLocation.latitude: latInit;
     //long = _currentLocation != null ? _currentLocation.longitude: longInit;
-    lat = latInit;
-    long = longInit;
+    lat = _currentLocation != null ? _currentLocation.latitude : latICGoogle;
+    long = _currentLocation != null ? _currentLocation.longitude : longICGoogle;
     latInit = 5.3760500;
     longInit = -3.9930055;
+    latICGoogle = 5.376037;
+    longICGoogle = -3.993089;
+    swboundaryGoo = LatLng(5.376010, -3.993148);
+    neboundaryGoo = LatLng(5.376119, -3.993086);
 
     var markers = <Marker>[
       Marker(
-        width: MediaQuery.of(context).size.width, //400.0,
-        height: MediaQuery.of(context).size.height, //400.0,
-        point: LatLng(latInit, longInit),
+        width: MediaQuery.of(context).size.width*0.8, //400.0,
+        height: MediaQuery.of(context).size.height*0.8, //400.0,
+        point: LatLng(latICGoogle, longICGoogle),
         builder: (ctx) => Container(
               child: Image.asset(
                 'assets/images/cerco.png',
@@ -119,7 +127,9 @@ StreamSubscription<LocationData> _locationSubscription;
       Marker(
         width: 80.0,
         height: 80.0,
-        point: LatLng(lat, long),
+        point: LatLng(
+                _currentLocation != null ? _currentLocation.latitude : latICGoogle, 
+                _currentLocation != null ? _currentLocation.longitude : longICGoogle),
         builder: (ctx) => Container(
               child: Icon(Icons.my_location), //FlutterLogo(),
             ),
@@ -127,17 +137,17 @@ StreamSubscription<LocationData> _locationSubscription;
       Marker(
         width: 80.0,
         height: 80.0,
-        point: LatLng(5.3760799, -3.9930248),
+        point: LatLng(latICGoogle+0.000070, longICGoogle-0.000020),
         builder: (ctx) => Container(
-              child: Icon(Icons.location_on, color: Colors.yellow),
+              child: Icon(Icons.location_on, color: Colors.red),
             ),
       ),
       Marker(
         width: 80.0,
         height: 80.0,
-        point: LatLng(5.3760799, -3.9929850),
+        point: LatLng(latICGoogle-0.000030, longICGoogle+0.000030),
         builder: (ctx) => Container(
-              child: Icon(Icons.location_on, color: Colors.yellow),
+              child: Icon(Icons.location_on, color: Colors.red),
             ),
       ),
       Marker(
@@ -163,13 +173,15 @@ StreamSubscription<LocationData> _locationSubscription;
               child: Text('Titre message\n'),
             ),
             */
-            /*Padding(
+            /*
+            Padding(
               padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
               //child: Text('This is a map that is showing (51.5, -0.9).'),
               child: Text(_startLocation != null
                   ? 'Start location: ${_startLocation.latitude} & ${_startLocation.longitude}\n'
                   : 'Error: $error\n'),
               ),
+              
             Padding(
               padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
               //child: Text('This is a map that is showing (51.5, -0.9).'),
@@ -177,7 +189,7 @@ StreamSubscription<LocationData> _locationSubscription;
                 ? 'Continuous location: \nlat: ${_currentLocation.latitude} & long: ${_currentLocation.longitude} \nalt: ${_currentLocation.altitude}m\n'
                 : 'Error: $error\n', textAlign: TextAlign.center),
               ),
-              */
+            */
             Flexible(
               child: FlutterMap(
                 /*
@@ -188,14 +200,12 @@ StreamSubscription<LocationData> _locationSubscription;
                 */
                 options: MapOptions(
                   center: LatLng(
-                      5.3760675, -3.9930117), //LatLng(56.704173, 11.543808),
+                      latICGoogle, longICGoogle), //LatLng(56.704173, 11.543808),
                   minZoom: 5.0,
                   maxZoom: 23.0,
                   zoom: 22.0,
-                  swPanBoundary:
-                      LatLng(5.3760411, -3.9930455), //LatLng(56.6877, 11.5089),
-                  nePanBoundary:
-                      LatLng(5.3760711, -3.9930110), //LatLng(56.7378, 11.6644),
+                  swPanBoundary: swboundaryGoo, // LatLng(5.3760411, -3.9930455), //LatLng(56.6877, 11.5089),
+                  nePanBoundary: neboundaryGoo, // LatLng(5.3760711, -3.9930110), //LatLng(56.7378, 11.6644),
                 ),
                 layers: [
                   TileLayerOptions(
