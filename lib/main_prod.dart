@@ -5,7 +5,7 @@ import 'app_config.dart';
 
 void main() {
   var configuredApp = new AppConfig(
-    firestorageEnv: 'dev',
+    firestorageEnv: 'prd',
     child: new MaterialApp(
       title: "Margouillat",
       home: new MyHome()
