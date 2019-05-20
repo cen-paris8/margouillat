@@ -14,7 +14,7 @@ class FirebaseStorageProvider {
   factory FirebaseStorageProvider() {
     return _instance;
   }
-
+  
   static final _thumbnailDirPath = 'thumbnail';
   static final _thumbnailPath =  _thumbnailDirPath + '/images_game.jpg';
   static final _homeDirPath = 'home';
@@ -32,25 +32,25 @@ class FirebaseStorageProvider {
     print(byteNumber); 
   }
 
-  String getGameThumbnailDirPath(String gameId) {
-    String gamePublicPath = getGamePublicPath(gameId);
+  String getGameThumbnailDirPath(String urlId) {
+    String gamePublicPath = getGamePublicPath(urlId);
     return gamePublicPath + _thumbnailDirPath;
   }
 
-  String getGameThumbnailPath(String gameId) {
-    String gamePublicPath = getGamePublicPath(gameId);
+  String getGameThumbnailPath(String urlId) {
+    String gamePublicPath = getGamePublicPath(urlId);
     return gamePublicPath + _thumbnailPath;
   }
 
-  String getGameResourcesDirPath(String gameId) {
-    String gamePublicPath = getGamePublicPath(gameId);
+  String getGameResourcesDirPath(String urlId) {
+    String gamePublicPath = getGamePublicPath(urlId);
     return gamePublicPath + _resourcesDirPath;
   }
 
-  String getGamePublicPath(String gameId) {
+  String getGamePublicPath(String urlId) {
     // TODO : set env from configuration or environment variable
     String env = "dev";
-    return "$env/tg/$gameId/public";
+    return "$env/tg/$urlId/public";
   }
 
 }

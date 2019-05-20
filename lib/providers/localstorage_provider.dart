@@ -28,26 +28,32 @@ class LocalStorageProvider {
     return _appDocDirPath;
   }
 
-  Future<String> getGameThumbnailPath(String gameId) async {
-    String gamePublicPath = await _getGamePublicDirPath(gameId);
-    String gameThumbnailDirPath = path.join(gamePublicPath, 'thumbnail');
-    Directory dir = new Directory(gameThumbnailDirPath);
-    if(!dir.existsSync()) {
-      dir.createSync(recursive: true);
-    }
+  Future<String> getGameThumbnailPath(String urlId) async {
+    String gameThumbnailDirPath = await _getGameSubDirPath(urlId, 'thumbnail');
     String gameThumbnailPath = path.join(gameThumbnailDirPath, 'images_game.jpg');
     return gameThumbnailPath;
   }
 
-  Future<String> _getGamePublicDirPath(String gameId) async {
-    String appDocDirectoryPath = await getAppDocDirPath();
-    return path.join(appDocDirectoryPath, gameId, 'public');
+  Future<String> _getGameSubDirPath(String urlId, String subDirPath) async {
+    String gamePublicPath = await _getGamePublicDirPath(urlId);
+    String gameSubDirPath = path.join(gamePublicPath, subDirPath);
+    Directory dir = new Directory(gameSubDirPath);
+    if(!dir.existsSync()) {
+      dir.createSync(recursive: true);
+    }
+    return gameSubDirPath;
   }
 
-  Future<Null> createGameArborescence(String gameId) async {
-    String gameThumbnailPath = await getGameThumbnailPath(gameId);
-    return new Directory(gameThumbnailPath).create(recursive: true);
+  Future<String> _getGamePublicDirPath(String urlId) async {
+    String appDocDirectoryPath = await getAppDocDirPath();
+    return path.join(appDocDirectoryPath, urlId, 'public');
   }
+
+  Future<Null> createGameArborescence(String urlId) async {
+    Future<String> gameThumbnailDirPath = _getGameSubDirPath(urlId, 'thumbnail');
+    Future<String> gameHomeDirPath = _getGameSubDirPath(urlId, 'home');
+  }
+
 
 
 }

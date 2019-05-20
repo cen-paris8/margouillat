@@ -6,6 +6,7 @@ import '../providers/firestore_provider.dart';
 import '../providers/firebasestorage_provider.dart';
 import '../providers/localstorage_provider.dart';
 import '../models/game_model.dart';
+import '../models/step_model.dart';
 import 'package:path_provider/path_provider.dart';
 
 
@@ -25,16 +26,86 @@ class GameRepository {
     return new Observable.fromFuture(gameList);
   }
 
+  Observable<GameModel> getGame(String gameId) {
+    Stream<DocumentSnapshot> sds = _firestoreProvider.getGame(gameId);
+    Future<GameModel> game = sds.first.then(
+     (ds) => _toFullGameModel(ds)
+    );
+    return Observable.fromFuture(game);
+  }
+
   Future<GameModel> _toGameModel(DocumentSnapshot snapshot) async {
     GameModel game = GameModel(snapshot.data['name']);
-    String gameId = snapshot.data['url_id'];
-    print(snapshot.data['name']);
-    print(snapshot.data['url_id']);
-    game.thumbnailUrl = _firebasestorageProvider.getGameThumbnailPath(gameId);
-    game.thumbnailPath = await _localstorageProvider.getGameThumbnailPath(gameId);
+    game.urlId = snapshot.data['url_id'];
+    game.thumbnailUrl = _firebasestorageProvider.getGameThumbnailPath(game.urlId);
+    game.thumbnailPath = await _localstorageProvider.getGameThumbnailPath(game.urlId);
     await _firebasestorageProvider.downloadFile(game.thumbnailUrl, game.thumbnailPath);
     return game;
   }
 
-  
+  Future<List<DocumentSnapshot>> getGameStepDocuments(String gameId) async {
+    Stream<QuerySnapshot> sqs = _firestoreProvider.getGameSteps(gameId);
+    Future<List<DocumentSnapshot>> stepList = sqs.first.then(
+     (qs) => qs.documents
+    );
+    return stepList;
+  }
+
+  Future<GameModel> _toFullGameModel(DocumentSnapshot snapshot) async {
+    var data = snapshot.data;
+    var gameId = snapshot.documentID;
+    GameModel game = GameModel.fromSnaphot(
+      gameId,
+      data['name'],
+      data['url_id'],
+      data['shortDescription'],
+      data['description']
+      );
+    print('Loading data from firestore');
+    List<DocumentSnapshot> stepsSnapshot = await getGameStepDocuments(gameId);
+    for (var ss in stepsSnapshot) {
+      var dq = ss.data;
+      BaseStepModel base = BaseStepModel.fromSnapthot(
+        dq['type'],
+        dq['title'],
+        dq['shortDescription'],
+        dq['description'],
+        dq['info']
+      );  
+      String type = dq['type'];
+      AbstractStep step;
+      switch (type) {
+        case StepType.Intro: {
+            step = new IntroStepModel(base);
+          }
+          break;
+        case StepType.MapIn: {
+            step = new MapInStepModel(base);
+          }
+          break;
+        case StepType.Map: {
+            step = new MapStepModel(base)
+              ..lng = double.parse(dq['lng'])
+              ..lat = double.parse(dq['lat']);
+          }
+          break;
+        case StepType.QCM: {
+            step = new QCMStepModel.fromBaseStep(base)
+              ..errMsg = dq['errMsg']
+              ..winMsg = dq['winMsg']
+              ..answer = dq['response']
+              ..addQCMItem(dq['qcm'])
+              ;
+          }
+          break;
+        default:
+          // TODO : log unknown step type
+          break;
+      }
+      game.addStep(step);
+    }
+    return game;
+  }
+
+
 }

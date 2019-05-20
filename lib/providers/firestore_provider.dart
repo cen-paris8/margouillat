@@ -16,4 +16,19 @@ class FirestoreProvider {
         .snapshots();
   }
 
+  Stream<DocumentSnapshot> getGame(String gameId) {
+    return _firestore
+        .collection('games')
+        .document(gameId)
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot> getGameSteps(String gameId) {
+    return _firestore
+        .collection('games')
+        .document(gameId)
+        .collection('steps')
+        .snapshots();
+  }
+
 }
