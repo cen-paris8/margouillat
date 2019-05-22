@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:using_bottom_nav_bar/models/game_model.dart';
 import 'package:using_bottom_nav_bar/models/step_model.dart';
 import 'package:using_bottom_nav_bar/ui/steps/intro.dart';
+import 'package:using_bottom_nav_bar/ui/steps/mcq.dart';
 import '../repositories/game_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:developer';
@@ -19,9 +20,15 @@ class GamePlayer extends StatelessWidget {
         if (!snapshot.hasData) return new Text('Loading..');
         GameModel gm = snapshot.data;
         print('${gm.steps.length} steps in this game');
+        /*
         BaseStepModel intro = gm.steps.first;
         return new IntroStep(
           model: intro
+        );
+        */
+        BaseStepModel model = gm.steps[0];
+        return new MCQWidget(
+          model: model
         );
       }
     );

@@ -36,6 +36,7 @@ abstract class AbstractStep {
 class BaseStepModel extends AbstractStep {
   
   String type;
+  int index;
   String title;
   String shortDescription;
   String description;
@@ -45,13 +46,14 @@ class BaseStepModel extends AbstractStep {
 
   BaseStepModel.fromStepModel(BaseStepModel stepModel) {
     this.type = stepModel.type;
+    this.index = stepModel.index;
     this.title = stepModel.title;
     this.shortDescription = stepModel.shortDescription;
     this.description = stepModel.description;
     this.info = stepModel.info;
   }
 
-  BaseStepModel.fromSnapthot(this.type, this.title, this.shortDescription, this.description, this.info);
+  BaseStepModel.fromSnapthot(this.type, this.index, this.title, this.shortDescription, this.description, this.info);
 
 
 
@@ -93,31 +95,36 @@ class BaseChallengeStepModel extends BaseStepModel {
 
   BaseChallengeStepModel.fromChallengeStepModel(BaseChallengeStepModel base);
 
-  void addErrMsg(String msg) {
+  void addErrMessage(String msg) {
     this.errMsg.add(msg);
+  }
+
+  void addErrMessages(List<String> messages) {
+    this.errMsg.addAll(messages);
   }
 
 }
 
 class QCMStepModel extends BaseChallengeStepModel {
   
-  List<String> qcm;
-  String answer;
+  List<String> choices;
+  int correctAnswser;
 
   QCMStepModel(BaseChallengeStepModel base) : super.fromChallengeStepModel(base){
-    this.qcm = new List<String>();
+    this.choices = new List<String>();
   }
 
   QCMStepModel.fromBaseStep(BaseStepModel base) : super(base) {
-    this.qcm = new List<String>();
+    this.errMsg = new List<String>();
+    this.choices = new List<String>();
   }
 
-  void addQCMItem(String item) {
-    this.qcm.add(item);
+  void addChoice(String item) {
+    this.choices.add(item);
   }
 
-  void addQCMItems(List<String> items) {
-    this.qcm.addAll(items);
+  void addChoices(List<String> items) {
+    this.choices.addAll(items);
   }
 
 }

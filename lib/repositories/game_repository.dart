@@ -45,9 +45,15 @@ class GameRepository {
 
   Future<List<DocumentSnapshot>> getGameStepDocuments(String gameId) async {
     Stream<QuerySnapshot> sqs = _firestoreProvider.getGameSteps(gameId);
+    /*
     Future<List<DocumentSnapshot>> stepList = sqs.first.then(
      (qs) => qs.documents
     );
+    */
+    Stream<List<DocumentSnapshot>> stepStream = sqs.map(
+      (qs) => qs.documents
+    );
+    Future<List<DocumentSnapshot>> stepList = stepStream.first;
     return stepList;
   }
 
@@ -63,16 +69,19 @@ class GameRepository {
       );
     print('Loading data from firestore');
     List<DocumentSnapshot> stepsSnapshot = await getGameStepDocuments(gameId);
+    print('Nb of steps retrieved: ${stepsSnapshot.length}');
     for (var ss in stepsSnapshot) {
       var dq = ss.data;
       BaseStepModel base = BaseStepModel.fromSnapthot(
         dq['type'],
+        dq['index'],
         dq['title'],
         dq['shortDescription'],
         dq['description'],
         dq['info']
-      );  
+      );
       String type = dq['type'];
+      print(type);
       AbstractStep step;
       switch (type) {
         case StepType.Intro: {
@@ -93,12 +102,13 @@ class GameRepository {
           }
           break;
         case StepType.QCM: {
+            print('Mapping for qcm');
             step = new QCMStepModel.fromBaseStep(base)
-              ..errMsg = dq['errMsg']
               ..winMsg = dq['winMsg']
-              ..answer = dq['response']
-              ..addQCMItem(dq['qcm'])
+              ..correctAnswser = dq['correctAnswer']
               ;
+            (step as QCMStepModel).addChoices(List.from(dq['choices']));
+            (step as QCMStepModel).addErrMessages(List.from(dq['errorMsg']));
           }
           break;
           // TODO : for all field referencing resources stored in fb storage, it is the place to launch async download to local filesystem
@@ -107,6 +117,7 @@ class GameRepository {
           break;
       }
       game.addStep(step);
+      print('Step added: ${base.title}');
     }
     return game;
   }
