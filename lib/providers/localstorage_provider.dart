@@ -15,27 +15,43 @@ class LocalStorageProvider {
   }
 
   LocalStorageProvider._internal(){
-
+    this._initAppDocDirPath();
   }
 
 
+  void _initAppDocDirPath() async {
+    if(this._appDocDirPath == null || this._appDocDirPath.isEmpty) {
+      Directory appDocDirectory = await getApplicationDocumentsDirectory();
+      this._appDocDirPath = appDocDirectory.path;
+    } 
+  }
 
+  String getAppDocDirPath() {
+    if(_appDocDirPath == null || _appDocDirPath.isEmpty) {
+      _initAppDocDirPath();
+    } 
+    return _appDocDirPath;
+  }
+
+/*
   Future<String> getAppDocDirPath() async {
     if(_appDocDirPath == null || _appDocDirPath.isEmpty) {
       Directory appDocDirectory = await getApplicationDocumentsDirectory();
       _appDocDirPath = appDocDirectory.path;
     } 
+    
     return _appDocDirPath;
   }
+*/
 
-  Future<String> getGameThumbnailPath(String urlId) async {
-    String gameThumbnailDirPath = await _getGameSubDirPath(urlId, 'thumbnail');
+  String getGameThumbnailPath(String urlId) {
+    String gameThumbnailDirPath = _getGameSubDirPath(urlId, 'thumbnail');
     String gameThumbnailPath = path.join(gameThumbnailDirPath, 'images_game.jpg');
     return gameThumbnailPath;
   }
 
-  Future<String> _getGameSubDirPath(String urlId, String subDirPath) async {
-    String gamePublicPath = await _getGamePublicDirPath(urlId);
+  String _getGameSubDirPath(String urlId, String subDirPath) {
+    String gamePublicPath = _getGamePublicDirPath(urlId);
     String gameSubDirPath = path.join(gamePublicPath, subDirPath);
     Directory dir = new Directory(gameSubDirPath);
     if(!dir.existsSync()) {
@@ -44,14 +60,26 @@ class LocalStorageProvider {
     return gameSubDirPath;
   }
 
-  Future<String> _getGamePublicDirPath(String urlId) async {
-    String appDocDirectoryPath = await getAppDocDirPath();
+  String _getGamePublicDirPath(String urlId) {
+    String appDocDirectoryPath = getAppDocDirPath();
+    print('Application document directory is located at: $appDocDirectoryPath');
     return path.join(appDocDirectoryPath, urlId, 'public');
   }
 
+  String _getGameResourcesDirPath(String urlId) {
+    String appGamePublicPath = _getGamePublicDirPath(urlId);
+    return appGamePublicPath;
+  }
+
+  String getGameResourcePath(String urlId, String resPath) {
+    String appGameResourcesPath = _getGameResourcesDirPath(urlId);
+    return path.join(appGameResourcesPath, resPath);
+  }
+
+
   Future<Null> createGameArborescence(String urlId) async {
-    Future<String> gameThumbnailDirPath = _getGameSubDirPath(urlId, 'thumbnail');
-    Future<String> gameHomeDirPath = _getGameSubDirPath(urlId, 'home');
+    String gameThumbnailDirPath = _getGameSubDirPath(urlId, 'thumbnail');
+    String gameHomeDirPath = _getGameSubDirPath(urlId, 'home');
   }
 
 

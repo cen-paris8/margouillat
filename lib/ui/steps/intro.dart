@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import '../../models/step_model.dart';
 
@@ -17,6 +19,13 @@ class IntroStep extends StatelessWidget {
           child: Row(children: <Widget>[
             Expanded(
               child: Text(this.model.title)
+              ),
+            Expanded( 
+              //child: Image.network('${snapshot.data.thumbnailUrl}')
+              child: Image.file(File(this.model.image))
+              ),
+            Expanded(
+              child: Text(this.model.image)
               ),
               ],
             )

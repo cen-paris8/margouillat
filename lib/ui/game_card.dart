@@ -16,7 +16,7 @@ class GameCard extends StatelessWidget {
     return new StreamBuilder(
       stream: game,
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return new Text('');
+        if (!snapshot.hasData) return new Text('Loading');
         return new Card(
         color: Colors.white,
         elevation: 10.0,

@@ -12,7 +12,6 @@ class GamePlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //GameModel g = new GameModel('toto');
     debugPrint('In GamePlayer');
     return new StreamBuilder( 
       stream: _gameRepository.getGame('c9i6O9d0jj6LS96Kvm8L'),

@@ -38,7 +38,7 @@ class GameRepository {
     GameModel game = GameModel(snapshot.data['name']);
     game.urlId = snapshot.data['url_id'];
     game.thumbnailUrl = _firebasestorageProvider.getGameThumbnailPath(game.urlId);
-    game.thumbnailPath = await _localstorageProvider.getGameThumbnailPath(game.urlId);
+    game.thumbnailPath = _localstorageProvider.getGameThumbnailPath(game.urlId);
     await _firebasestorageProvider.downloadFile(game.thumbnailUrl, game.thumbnailPath);
     return game;
   }
@@ -76,7 +76,10 @@ class GameRepository {
       AbstractStep step;
       switch (type) {
         case StepType.Intro: {
-            step = new IntroStepModel(base);
+            step = new IntroStepModel(base)
+              ..image = _localstorageProvider.getGameResourcePath(game.urlId, dq['image']);
+            // TODO : launch image download
+            this._launchAsyncDownload(game.urlId, dq['image']);
           }
           break;
         case StepType.MapIn: {
@@ -98,6 +101,7 @@ class GameRepository {
               ;
           }
           break;
+          // TODO : for all field referencing resources stored in fb storage, it is the place to launch async download to local filesystem
         default:
           // TODO : log unknown step type
           break;
@@ -107,5 +111,10 @@ class GameRepository {
     return game;
   }
 
+  Future<Null> _launchAsyncDownload(urlId, path) async {
+    String fbPath = _firebasestorageProvider.getGameResourcesPath(urlId, path);
+    String localPath = _localstorageProvider.getGameResourcePath(urlId, path);
+    _firebasestorageProvider.downloadFile(fbPath, localPath);
+  }
 
 }

@@ -60,6 +60,8 @@ class BaseStepModel extends AbstractStep {
 }
 
 class IntroStepModel extends BaseStepModel {
+
+  String image;
   
   IntroStepModel(BaseStepModel base) : super.fromStepModel(base);
 
