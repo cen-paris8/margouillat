@@ -8,9 +8,32 @@ import 'package:using_bottom_nav_bar/ui/steps/mcq.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:developer';
 
-class GamePlayer extends StatelessWidget {
+class GamePlayer extends StatefulWidget {
+
+  @override
+  _GamePlayerState createState() => _GamePlayerState();
+
+  GamePlayer({Key key})
+    : super(key: key);
+}
+
+class _GamePlayerState extends State<GamePlayer> {
 
   final GameManager _gameManager = new GameManager('c9i6O9d0jj6LS96Kvm8L');
+
+  Widget _buildStepWidget(BaseStepModel model) {
+    switch(model.type) {
+      case StepType.Intro:
+        return new IntroStep(model: model);
+        break;
+      case StepType.MCQ:
+        return new MCQWidget(model: model);
+        break;
+      default:
+        return  new Text('Default step widget');
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,19 +47,13 @@ class GamePlayer extends StatelessWidget {
               child: new StreamBuilder( 
                 stream: _gameManager.gameEventStream,
                 builder: (context, snapshot) {
-                  if (!snapshot.hasData) return new Text('Loading..');
+                  if (!snapshot.hasData) 
+                    // TODO : return default game widget
+                    return new Text('Loading..');
                   GameEvent e = snapshot.data;
                   BaseStepModel model = e.step.model;
                   print('Game event received');
-                  if(e.step.model.type == StepType.QCM) {
-                    return new MCQWidget(
-                      model: model
-                    );
-                  } else {
-                    return new IntroStep(
-                      model: model
-                    );
-                  }                 
+                  return this._buildStepWidget(model);           
                 }
               )
             ),

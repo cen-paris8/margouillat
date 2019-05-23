@@ -8,7 +8,7 @@ class MCQWidget extends StatefulWidget {
   MCQWidget({Key key, this.model})
       : super(key: key);
 
-  final QCMStepModel model;
+  final MCQStepModel model;
 
   @override
   _MCQWidgetState createState() => _MCQWidgetState();
@@ -43,7 +43,7 @@ class _MCQWidgetState extends State<MCQWidget> {
   }
 
   void _handleButtonPressed(int index) {
-    QCMStepModel model = widget.model;
+    MCQStepModel model = widget.model;
     int errorMsgIndex = _activeButtons.where((e) => !e).length;
     String msg = model.errMsg[errorMsgIndex];
     if(model.correctAnswser == index)
@@ -58,7 +58,7 @@ class _MCQWidgetState extends State<MCQWidget> {
 
   @override
   Widget build(BuildContext context) {
-    QCMStepModel model = widget.model;
+    MCQStepModel model = widget.model;
     return new Container(
         margin: const EdgeInsets.all(10.0),
         alignment: Alignment.topCenter,

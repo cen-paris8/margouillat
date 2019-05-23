@@ -2,7 +2,7 @@ enum EnumStepType {
   intro,
   mapin,
   map,
-  qcm,
+  mcq,
   puzzle,
   audio,
   enigma,
@@ -16,8 +16,8 @@ class StepType {
 
   static const Intro = "intro";
   static const MapIn = "map-in";
-  static const Map= "map";
-  static const QCM= "qcm";
+  static const Map = "map";
+  static const MCQ = "mcq";
   static const Puzzle = "puzzle";
   static const Enigma = "audio";
   static const End = "final";
@@ -107,16 +107,16 @@ class BaseChallengeStepModel extends BaseStepModel {
 
 }
 
-class QCMStepModel extends BaseChallengeStepModel {
+class MCQStepModel extends BaseChallengeStepModel {
   
   List<String> choices;
   int correctAnswser;
 
-  QCMStepModel(BaseChallengeStepModel base) : super.fromChallengeStepModel(base){
+  MCQStepModel(BaseChallengeStepModel base) : super.fromChallengeStepModel(base){
     this.choices = new List<String>();
   }
 
-  QCMStepModel.fromBaseStep(BaseStepModel base) : super(base) {
+  MCQStepModel.fromBaseStep(BaseStepModel base) : super(base) {
     this.errMsg = new List<String>();
     this.choices = new List<String>();
   }

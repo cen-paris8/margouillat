@@ -61,7 +61,7 @@ class GameManager {
   }
 
   void _handleEvent(var data){
-    // TODO : sweetch according event type and values (e.g. geoloc event, beacon, nfc, qrcode, ui, time)
+    // TODO : switch according event type and values (e.g. geoloc event, beacon, nfc, qrcode, ui, time)
     int stepIndex = int.parse(data);
     BaseStepModel nextStepModel = this.game.getStepByIndex(stepIndex);
     Step nextStep = Step.fromModel(nextStepModel);

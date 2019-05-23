@@ -45,11 +45,6 @@ class GameRepository {
 
   Future<List<DocumentSnapshot>> getGameStepDocuments(String gameId) async {
     Stream<QuerySnapshot> sqs = _firestoreProvider.getGameSteps(gameId);
-    /*
-    Future<List<DocumentSnapshot>> stepList = sqs.first.then(
-     (qs) => qs.documents
-    );
-    */
     Stream<List<DocumentSnapshot>> stepStream = sqs.map(
       (qs) => qs.documents
     );
@@ -101,14 +96,14 @@ class GameRepository {
               ..lat = double.parse(dq['lat']);
           }
           break;
-        case StepType.QCM: {
-            print('Mapping for qcm');
-            step = new QCMStepModel.fromBaseStep(base)
+        case StepType.MCQ: {
+            print('Mapping for MCQ');
+            step = new MCQStepModel.fromBaseStep(base)
               ..winMsg = dq['winMsg']
               ..correctAnswser = dq['correctAnswer']
               ;
-            (step as QCMStepModel).addChoices(List.from(dq['choices']));
-            (step as QCMStepModel).addErrMessages(List.from(dq['errorMsg']));
+            (step as MCQStepModel).addChoices(List.from(dq['choices']));
+            (step as MCQStepModel).addErrMessages(List.from(dq['errorMsg']));
           }
           break;
           // TODO : for all field referencing resources stored in fb storage, it is the place to launch async download to local filesystem
