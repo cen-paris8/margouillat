@@ -44,12 +44,15 @@ class GameManager {
   final GameRepository _gameRepository = new GameRepository();
   StreamController _gameEventsController = new StreamController.broadcast();
 
+  Stream get gameEventStream => _gameEventsController.stream;
+
   GameManager(this._gameId){
     this.game = new Game();
+    this._getGame(this._gameId);
   }
 
   void _getGame(String gameId) {
-    Observable<GameModel> oModel = _gameRepository.getGame('c9i6O9d0jj6LS96Kvm8L');
+    Observable<GameModel> oModel = _gameRepository.getGame(gameId);
     oModel.first.then((model) =>
       this.game.model = model
     ).then((model) =>
@@ -57,8 +60,10 @@ class GameManager {
     );
   }
 
-  void _handleEvent(String data){
-    BaseStepModel nextStepModel = this.game.getStepByIndex(2);
+  void _handleEvent(var data){
+    // TODO : sweetch according event type and values (e.g. geoloc event, beacon, nfc, qrcode, ui, time)
+    int stepIndex = int.parse(data);
+    BaseStepModel nextStepModel = this.game.getStepByIndex(stepIndex);
     Step nextStep = Step.fromModel(nextStepModel);
     GameEvent gameEvent = new GameEvent();
     gameEvent.step = nextStep;
@@ -76,18 +81,5 @@ class GameManager {
       }
     );
   }
-
-  /*
-  Stream<String> stream = new Stream.fromFuture(getData());
-  print("Created the stream");
-
-  stream.listen((data) {
-    print("DataReceived: "+data);
-  }, onDone: () {
-    print("Task Done");
-  }, onError: (error) {
-    print("Some Error");
-  });
-  */
 
 }

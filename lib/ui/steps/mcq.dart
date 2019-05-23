@@ -59,8 +59,7 @@ class _MCQWidgetState extends State<MCQWidget> {
   @override
   Widget build(BuildContext context) {
     QCMStepModel model = widget.model;
-    return new Scaffold(
-      body: new Container(
+    return new Container(
         margin: const EdgeInsets.all(10.0),
         alignment: Alignment.topCenter,
         child: new Column(
@@ -80,7 +79,6 @@ class _MCQWidgetState extends State<MCQWidget> {
                 ],
               ),
             ),
-
 
             new Padding(padding: EdgeInsets.all(10.0)),
 
@@ -155,7 +153,6 @@ class _MCQWidgetState extends State<MCQWidget> {
             ),
           ],
         ),
-      ),
     );
   }
 }

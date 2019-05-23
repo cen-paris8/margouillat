@@ -11,9 +11,7 @@ class EventSimulator extends StatefulWidget {
   EventSimulator({Key key})
     : super(key: key);
 
-
 }
-
 
 class _EventSimulatorState extends State<EventSimulator> {
 
@@ -52,9 +50,9 @@ class _EventSimulatorState extends State<EventSimulator> {
       child: Container(
         //height: 200.0,
         //width: 100.0,
-        alignment: Alignment.center,
+        alignment: Alignment.bottomCenter,
         constraints:
-          BoxConstraints.expand(width: 100.0, height: 200.0),
+          BoxConstraints.expand(height: 100.0),
         child: Column (
           children: <Widget>[
             Expanded(
@@ -63,20 +61,41 @@ class _EventSimulatorState extends State<EventSimulator> {
                 maxLength: 20,
               )
             ),
-            Expanded(
-              child: MaterialButton(
-                height: 20.0,
-                minWidth: 80.0,
-                color: Colors.blueGrey,
-                onPressed: () => _sendEvent('1'),
-                child: new Text('Send event',
-                  style: new TextStyle(
-                  fontSize: 12.0,
-                  color: Colors.white
-                  ),
+            new Padding(padding: EdgeInsets.all(10.0)),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: MaterialButton(
+                    height: 20.0,
+                    minWidth: 80.0,
+                    color: Colors.blueGrey,
+                    onPressed: () => _sendEvent('1'),
+                    child: new Text('Send event 1',
+                      style: new TextStyle(
+                      fontSize: 12.0,
+                      color: Colors.white
+                      ),
+                    ),
+                  )
                 ),
-              )
+                new Padding(padding: EdgeInsets.all(5.0)),
+                Expanded(
+                  child: MaterialButton(
+                    height: 20.0,
+                    minWidth: 80.0,
+                    color: Colors.blueGrey,
+                    onPressed: () => _sendEvent('2'),
+                    child: new Text('Send event 2',
+                      style: new TextStyle(
+                      fontSize: 12.0,
+                      color: Colors.white
+                      ),
+                    ),
+                  )
+                )
+              ]
             ),
+            new Padding(padding: EdgeInsets.all(5.0)),
             Expanded(
               child: Text(_receivedEvent)
             )
