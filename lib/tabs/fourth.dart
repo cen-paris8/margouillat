@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../ui/catalog.dart';
 import '../ui/catalogRx.dart';
 import '../ui/game_player.dart';
+import '../ui/event_simulator.dart';
 
 
 class FourthTab extends StatelessWidget {
@@ -11,5 +12,6 @@ class FourthTab extends StatelessWidget {
     //return GameCatalog();
     //return GameCatalogRx();
     return GamePlayer();
+    //return EventSimulator();
   }
 }

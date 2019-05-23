@@ -13,14 +13,14 @@ class GameModel {
 
   GameModel(String name){
     this.name = name;
-    this.steps = new List<AbstractStep>();
+    this.steps = new List<BaseStepModel>();
   }
 
   GameModel.fromSnaphot(this.id, this.name, this.urlId, this.shortDescription, this.description){
-    this.steps = new List<AbstractStep>();
+    this.steps = new List<BaseStepModel>();
   }
 
-  void addStep(AbstractStep step) {
+  void addStep(BaseStepModel step) {
     this.steps.add(step);
   }
 }

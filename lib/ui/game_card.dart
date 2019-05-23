@@ -30,7 +30,7 @@ class GameCard extends StatelessWidget {
               //child: Image.network('${snapshot.data.thumbnailUrl}')
               child: Image.file(File(snapshot.data.thumbnailPath))
               ),
-              Expanded(
+            Expanded(
               child: Text('${snapshot.data.thumbnailPath}')
               )
               ],

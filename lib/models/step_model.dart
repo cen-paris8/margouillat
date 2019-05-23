@@ -30,6 +30,8 @@ class StepType {
 
 abstract class AbstractStep {
 
+  int get index;
+
 }
 
 // https://gist.github.com/dmundt/3989840
