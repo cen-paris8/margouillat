@@ -76,7 +76,7 @@ class GameRepository {
         dq['info']
       );
       String type = dq['type'];
-      print(type);
+      print(base);
       AbstractStep step;
       switch (type) {
         case StepType.Intro: {

@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
 import 'package:using_bottom_nav_bar/logic/event_manager.dart';
+import 'package:using_bottom_nav_bar/logic/beacon_manager.dart';
 import 'package:using_bottom_nav_bar/models/game_model.dart';
 import 'package:using_bottom_nav_bar/models/step_model.dart';
 import 'package:using_bottom_nav_bar/repositories/game_repository.dart';
@@ -60,8 +61,7 @@ class GameManager {
     );
   }
 
-  void _handleEvent(var data){
-    // TODO : switch according event type and values (e.g. geoloc event, beacon, nfc, qrcode, ui, time)
+  void _handleUIEvent(var data){
     int stepIndex = int.parse(data);
     BaseStepModel nextStepModel = this.game.getStepByIndex(stepIndex);
     Step nextStep = Step.fromModel(nextStepModel);
@@ -70,14 +70,35 @@ class GameManager {
     _gameEventsController.add(gameEvent);
   }
 
-
+  void _handleBeaconEvent(var data){
+    // TODO : Create default and information/debug/simple step
+    BaseStepModel nextStepModel = BaseStepModel.fromSnapthot(
+      "beacon", 
+      99, 
+      "", 
+      "", 
+      data.toString(),
+      "");
+    Step nextStep = Step.fromModel(nextStepModel);
+    GameEvent gameEvent = new GameEvent();
+    gameEvent.step = nextStep;
+    _gameEventsController.add(gameEvent);
+  }
 
   void _startGame() {
      // get player
      // save session start
      // start listening to events
-     _eventManager.addUIEventHandler((data) => {
-      _handleEvent(data)
+     // TODO : switch according event type and values (e.g. geoloc event, beacon, nfc, qrcode, ui, time)
+    _eventManager.addUIEventHandler((data) => {
+        _handleUIEvent(data)
+      }
+    );
+    // TODO : check if the game use beacon
+    // initialize beacon features
+    BeaconManager beaconManager = BeaconManager();
+    _eventManager.addBeaconEventHandler((data) => {
+      _handleBeaconEvent(data)
       }
     );
   }

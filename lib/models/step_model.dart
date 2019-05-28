@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 enum EnumStepType {
   intro,
   mapin,
@@ -57,11 +59,27 @@ class BaseStepModel extends AbstractStep {
 
   BaseStepModel.fromSnapthot(this.type, this.index, this.title, this.shortDescription, this.description, this.info);
 
-
-
   // void render ();
+  
+  dynamic get toJson {
+    final map = <String, dynamic>{
+      'type': type,
+      'index': index,
+      'title': title,
+      'shortDescription': shortDescription,
+      'accurdescriptionacy': description,
+      'info': info
+    };
+
+    return map;
+}
+
+  String toString() {
+    return 'StepModel${json.encode(this.toJson)}';
+  }
 
 }
+
 
 class IntroStepModel extends BaseStepModel {
 

@@ -24,6 +24,11 @@ class _EventSimulatorState extends State<EventSimulator> {
     _eventManager.addUIEvent(value);
   }
 
+  void _sendBeaconEvent(String value) {
+    print('Sending beacon event: $value');
+    _eventManager.addBeaconEvent(value);
+  }
+
   void _handleEvent(String data){
     _receivedEvent = data;    
     setState(() {});
@@ -55,13 +60,18 @@ class _EventSimulatorState extends State<EventSimulator> {
           BoxConstraints.expand(height: 100.0),
         child: Column (
           children: <Widget>[
-            Expanded(
-              child: TextField(
-                controller: controller,
-                maxLength: 20,
-              )
+            /*
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: TextField(
+                    controller: controller,
+                    maxLength: 20,
+                  )
+                )
+              ]
             ),
-            new Padding(padding: EdgeInsets.all(10.0)),
+            */
             Row(
               children: <Widget>[
                 Expanded(
@@ -78,7 +88,6 @@ class _EventSimulatorState extends State<EventSimulator> {
                     ),
                   )
                 ),
-                new Padding(padding: EdgeInsets.all(5.0)),
                 Expanded(
                   child: MaterialButton(
                     height: 20.0,
@@ -95,9 +104,26 @@ class _EventSimulatorState extends State<EventSimulator> {
                 )
               ]
             ),
-            new Padding(padding: EdgeInsets.all(5.0)),
-            Expanded(
-              child: Text(_receivedEvent)
+            Row(
+              children: <Widget>[
+                Expanded(
+                child: Text(_receivedEvent)
+                ),
+                Expanded(
+                  child: MaterialButton(
+                    height: 20.0,
+                    minWidth: 80.0,
+                    color: Colors.blueGrey,
+                    onPressed: () => _sendBeaconEvent('Beacon'),
+                    child: new Text('Send beacon event',
+                      style: new TextStyle(
+                      fontSize: 12.0,
+                      color: Colors.white
+                      ),
+                    ),
+                  )
+                ),
+              ]
             )
           ]
         )

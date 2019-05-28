@@ -2,9 +2,8 @@ import 'dart:async';
 
 class EventManager {
 
-  List<StreamController> controllers = new List<StreamController>();
-
-  StreamController uiEventsController = new StreamController.broadcast();
+  StreamController _uiEventsController = new StreamController.broadcast();
+  StreamController _beaconEventsController = new StreamController.broadcast();
 
   static final EventManager _instance =
       new EventManager._internal();
@@ -16,15 +15,15 @@ class EventManager {
   EventManager._internal(){}
 
   void addUIEvent(String event) {
-    uiEventsController.add(event);
+    _uiEventsController.add(event);
   }
 
   void addUIEventListener(Function callback){
-    uiEventsController.stream.listen(callback);
+    _uiEventsController.stream.listen(callback);
   }
 
   void addUIEventHandler(Function dataHandler){
-    uiEventsController.stream.listen((data) {
+    _uiEventsController.stream.listen((data) {
         print("DataReceived: "+data);
         dataHandler(data);
       }, 
@@ -37,6 +36,29 @@ class EventManager {
     );
   }
 
-  //Stream get uiStream => uiEventsController.stream;
+  void addBeaconEvent(var event) {
+    _beaconEventsController.add(event);
+  }
+
+  void addBeaconEventListener(Function callback){
+    _beaconEventsController.stream.listen(callback);
+  }
+
+  void addBeaconEventHandler(Function dataHandler){
+    _beaconEventsController.stream.listen((data) {
+        print("Beacon event received");
+        dataHandler(data);
+      }, 
+      onDone: () {
+        print("Task Done or Stream closed");
+      }, 
+      onError: (error) {
+        print("Some Error");
+      }
+    );
+  }
+
+  //Stream get uiStream => _uiEventsController.stream;
 
 }
+

@@ -16,6 +16,7 @@ dependencies:
   location: ^2.3.5
   path_provider:
   rxdart: 0.22.0
+  flutter_beacon: ^0.2.2
 
 dev_dependencies:
   flutter_test:
