@@ -13,11 +13,7 @@ class GameCatalog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //GameModel g = new GameModel('toto');
-    debugPrint('Ici');
-    debugger();
     return new StreamBuilder(
-      //stream: Firestore.instance.collection('games').snapshots(),
       stream: _firestoreProvider.gameListEvents(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return new Text('Loading..');

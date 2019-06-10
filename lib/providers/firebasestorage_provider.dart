@@ -30,7 +30,6 @@ class FirebaseStorageProvider {
     }
     StorageFileDownloadTask downloadTask = ref.writeToFile(file);
     int byteNumber = (await downloadTask.future).totalByteCount;
-    print(byteNumber); 
   }
 
   String getGameThumbnailDirPath(String urlId) {

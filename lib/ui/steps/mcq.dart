@@ -100,7 +100,6 @@ class _MCQWidgetState extends State<MCQWidget> {
                   isGood: _goodButtons[0],
                   isActive: _activeButtons[0],
                   onBtnPressed: () {   
-                    print('OnPressed');                    
                     _handleButtonPressed(0);
                   }
                 ),
@@ -112,7 +111,6 @@ class _MCQWidgetState extends State<MCQWidget> {
                   isGood: _goodButtons[1],
                   isActive: _activeButtons[1],
                   onBtnPressed: () {   
-                    print('OnPressed');                    
                     _handleButtonPressed(1);
                   }
                 ),
@@ -132,7 +130,6 @@ class _MCQWidgetState extends State<MCQWidget> {
                   isGood: _goodButtons[2],
                   isActive: _activeButtons[2],
                   onBtnPressed: () {   
-                    print('OnPressed');                    
                     _handleButtonPressed(2);
                   }
                 ),
@@ -144,7 +141,6 @@ class _MCQWidgetState extends State<MCQWidget> {
                   isGood: _goodButtons[3],
                   isActive: _activeButtons[3],
                   onBtnPressed: () {   
-                    print('OnPressed');                    
                     _handleButtonPressed(3);
                   }
                 ),
@@ -178,7 +174,6 @@ class QuizChoiceButton extends StatefulWidget {
 class _QuizChoiceButtonState extends State<QuizChoiceButton> {
  
   void _onPressed() {
-    print('_onPressed');
     widget.onBtnPressed();
   }
 
