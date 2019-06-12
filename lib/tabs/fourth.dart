@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:using_bottom_nav_bar/logic/virtual_map.dart';
+import 'package:using_bottom_nav_bar/repositories/beacon_repository.dart';
+import 'package:using_bottom_nav_bar/ui/map.dart';
 import '../ui/catalog.dart';
 import '../ui/catalogRx.dart';
 import '../ui/game_player.dart';
@@ -11,7 +14,15 @@ class FourthTab extends StatelessWidget {
   Widget build(BuildContext context) {
     //return GameCatalog();
     //return GameCatalogRx();
-    return GamePlayer();
+    //return GamePlayer();
     //return EventSimulator();
+    // For test
+    BeaconRepository _beaconRepository = BeaconRepository();
+    List<BeaconAnchor> anchors = _beaconRepository.getBeaconAnchors('dummyGameId');
+    VirtualMap vMap = new VirtualMap(10, 16);
+    for(BeaconAnchor anchor in anchors) {
+      vMap.addAnchorObject(anchor);
+    }
+    return Map(virtualMap: vMap,);
   }
 }

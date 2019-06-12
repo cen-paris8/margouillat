@@ -1,21 +1,13 @@
 import 'dart:developer';
-import 'dart:io';
-import 'dart:math';
-
-
-import 'package:flutter/services.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:test/test.dart';
 import 'package:using_bottom_nav_bar/logic/beacon_manager.dart';
 import 'package:using_bottom_nav_bar/logic/position_manager.dart';
-import 'package:using_bottom_nav_bar/models/beacon_model.dart';
+import 'package:using_bottom_nav_bar/logic/virtual_map.dart';
+import 'package:using_bottom_nav_bar/models/position.dart';
 import 'package:using_bottom_nav_bar/repositories/beacon_repository.dart';
 import '../lib/models/game_model.dart';
-import '../lib/providers/firebasestorage_provider.dart';
-import '../lib/providers/firestore_provider.dart';
-import '../lib/providers/localstorage_provider.dart';
 import '../lib/repositories/game_repository.dart';
-import 'package:path_provider/path_provider.dart' as PathProvider;
 
 void main() {
 
@@ -40,20 +32,23 @@ void main() {
   test('Get current location', () {
     final BeaconRepository _repository = new BeaconRepository();
     PositioningManager pManager = PositioningManager();
-    List<LocalizedBeacon> beacons = _repository.getLocalizedBeacons("dummy");
-    List<LocalizedBeaconData> beaconsData = new List<LocalizedBeaconData>();
-    LocalizedBeaconData lbd1 = LocalizedBeaconData.fromBeacon(beacons[0]);
-    LocalizedBeaconData lbd2 = LocalizedBeaconData.fromBeacon(beacons[1]);
-    LocalizedBeaconData lbd3 = LocalizedBeaconData.fromBeacon(beacons[2]);
+    List<BeaconAnchor> beacons = _repository.getBeaconAnchors("dummy");
+    List<BeaconAnchorData> beaconsData = new List<BeaconAnchorData>();
+    BeaconAnchorData lbd1 = BeaconAnchorData.fromBeacon(beacons[0]);
+    BeaconAnchorData lbd2 = BeaconAnchorData.fromBeacon(beacons[1]);
+    BeaconAnchorData lbd3 = BeaconAnchorData.fromBeacon(beacons[2]);
     beaconsData.add(lbd1);
     beaconsData.add(lbd2);
     beaconsData.add(lbd3);
     Position expectedPosition = Position.origin();
     for(Position p in testPositions) {
       expectedPosition = p;
-      lbd1.distance = expectedPosition.distanceTo(lbd1.beacon.position) + 1;
-      lbd2.distance = expectedPosition.distanceTo(lbd2.beacon.position) - 2;
-      lbd3.distance = expectedPosition.distanceTo(lbd3.beacon.position) + 1;
+      num d1 = expectedPosition.distanceTo(lbd1.beacon.position) + 1;
+      lbd1.addSDistance(d1);
+      num d2 = expectedPosition.distanceTo(lbd2.beacon.position) - 2;
+      lbd1.addSDistance(d2);
+      num d3 = expectedPosition.distanceTo(lbd3.beacon.position) + 1;
+      lbd1.addSDistance(d3);
       Position currentPosition = pManager.calculatePosition(beaconsData);
       expect(currentPosition, isNotNull);  
       num distanceExpectedToCurent = expectedPosition.distanceTo(currentPosition);

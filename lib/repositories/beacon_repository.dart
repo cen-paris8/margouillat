@@ -1,4 +1,4 @@
-import 'package:using_bottom_nav_bar/models/beacon_model.dart';
+import 'package:using_bottom_nav_bar/logic/virtual_map.dart';
 import 'package:using_bottom_nav_bar/providers/firestore_provider.dart';
 
 class BeaconRepository {
@@ -6,15 +6,15 @@ class BeaconRepository {
   final FirestoreProvider _firestoreProvider = new FirestoreProvider();
 
   // TODO : remove, only for test
-  final List<LocalizedBeacon> simulatedBeacons = List.from(
+  List<BeaconAnchor> simulatedBeacons = List.from(
     [
-      new LocalizedBeacon(new Position(2, 2), "4d6fc88b-be75-6698-da48-6866-a36ec78e"),
-      new LocalizedBeacon(new Position(5, 5), "tata"),
-      new LocalizedBeacon(new Position(2, 8), "titi"),
+      new BeaconAnchor(1.0, 4.0, "4d6fc88b-be75-6698-da48-6866a36ec78e"), // 1
+      new BeaconAnchor(5.0, 13.0, "644f76f7-6a52-42bc-e911-5e8c56441796"), // 2
+      new BeaconAnchor(9.0, 0.0, "644f76f7-6a52-42bc-e911-5e8c6279c1a0"), // 3
     ]
   );
 
-  List<LocalizedBeacon> getLocalizedBeacons(String gamePlayId) {
+  List<BeaconAnchor> getBeaconAnchors(String gamePlayId) {
     return this.simulatedBeacons;
   }
 

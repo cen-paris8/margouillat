@@ -1,9 +1,13 @@
 import 'dart:async';
 
+import 'package:using_bottom_nav_bar/logic/beacon_manager.dart';
+import 'package:using_bottom_nav_bar/logic/position_manager.dart';
+
 class EventManager {
 
   StreamController _uiEventsController = new StreamController.broadcast();
   StreamController _beaconEventsController = new StreamController.broadcast();
+  StreamController _positionEventsController = new StreamController.broadcast();
 
   static final EventManager _instance =
       new EventManager._internal();
@@ -36,7 +40,8 @@ class EventManager {
     );
   }
 
-  void addBeaconEvent(var event) {
+
+  void addBeaconEvent(RangingEvent event) {
     _beaconEventsController.add(event);
   }
 
@@ -58,7 +63,30 @@ class EventManager {
     );
   }
 
-  //Stream get uiStream => _uiEventsController.stream;
+
+  void addPositionEvent(PositionEvent event) {
+    _positionEventsController.add(event);
+  }
+
+  void addPositionEventListener(Function callback){
+    _positionEventsController.stream.listen(callback);
+  }
+
+  void addPositionEventHandler(Function dataHandler){
+    _positionEventsController.stream.listen((data) {
+        print("Position event received");
+        dataHandler(data);
+      }, 
+      onDone: () {
+        print("Task Done or Stream closed");
+      }, 
+      onError: (error) {
+        print("Some Error");
+      }
+    );
+  }
+
+  Stream get positionStream { return _positionEventsController.stream; }
 
 }
 

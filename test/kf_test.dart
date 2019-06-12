@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:intl/intl.dart';
 import 'package:test/test.dart';
 import 'package:using_bottom_nav_bar/logic/kalman_filter1D.dart';
 import 'package:using_bottom_nav_bar/logic/math_helper.dart';

@@ -1,0 +1,172 @@
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:using_bottom_nav_bar/logic/beacon_manager.dart';
+import 'package:using_bottom_nav_bar/logic/event_manager.dart';
+import 'package:using_bottom_nav_bar/logic/position_manager.dart';
+import 'package:using_bottom_nav_bar/logic/virtual_map.dart';
+import 'package:using_bottom_nav_bar/models/position.dart';
+
+class Map extends StatefulWidget {
+
+  @override
+  _MapState createState() => _MapState();
+
+  VirtualMap virtualMap;
+
+  Map({Key key, this.virtualMap})
+    : super(key: key);
+}
+
+class _MapState extends State<Map> {
+
+  final EventManager _eventManager = EventManager();
+  Position _playerPosition = new Position(0, 0);
+  BeaconManager beaconManager;
+  PositioningManager positionManager;
+  double cellSize = 0;
+  
+  @override
+  initState() {
+    super.initState();
+    beaconManager = BeaconManager();
+    positionManager = PositioningManager();
+    _eventManager.addPositionEventListener(_processPosition);
+  }
+
+  void _processPosition(var event) {
+    print("Handling Position event in map");
+    if(this.mounted) {
+      setState(() {
+        _playerPosition = event.position;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new StreamBuilder(
+      stream: _eventManager.positionStream,
+      builder: (context, snapshot) {
+        //if (!snapshot.hasData) return new Text('Loading..');
+        return Container ( 
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              cellSize = _getCellSize(constraints.maxHeight, widget.virtualMap.height, constraints.maxWidth, widget.virtualMap.width);
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buildField(widget.virtualMap.height, widget.virtualMap.width)
+                ]
+              );
+            }
+          )
+        );
+      }
+    );
+  }
+
+  double _getCellSize(maxHeight, nbRows, maxWidth, nbColumns) {
+    double maxCellHeight = maxHeight / nbRows;
+    double maxCellWidth = maxWidth / nbColumns;
+    double size = min(maxCellHeight, maxCellWidth);
+    return size - 10;
+  }
+
+  Widget buildField(int nbRow, int nbColumn) {
+    return AspectRatio(
+      aspectRatio: 1.0,
+      child:
+        Column(
+          verticalDirection: VerticalDirection.up,
+          mainAxisAlignment: MainAxisAlignment.center, 
+          children: buildRows(nbRow, nbColumn)
+        )
+      );
+  }
+
+  List<Widget> buildRows(int nbRows, int nbColumns) {
+    List<Widget> rows = List<Widget>();
+    for(int i=0; i < nbRows; i++) {
+      rows.add(buildRow(i, nbColumns));
+    }
+    return rows;
+  }
+  
+  Widget buildRow(int rowIndex, int nbColumn) {
+    return Container (
+      padding: EdgeInsets.all(0.0),
+      margin: EdgeInsets.all(0.0), 
+      child: Row(
+        children: buildCells(rowIndex, nbColumn)
+      )
+    );
+  }
+
+
+
+  List<Widget> buildCells(int rowIndex, int nbCells) {
+    List<Widget> cells = List<Widget>();
+    for(int i=0; i < nbCells; i++) {
+      cells.add(buildCell(rowIndex, i));
+    }
+    return cells;
+  }
+
+  Widget buildCell(int row, int column) {
+    return Container(
+      width:cellSize,
+      height:cellSize,
+      padding: EdgeInsets.all(0.0),
+      margin: EdgeInsets.all(0.0), 
+      decoration: BoxDecoration(         
+        color: Colors.white,
+        shape: BoxShape.rectangle,
+        border: Border.all(color: Colors.grey),
+      ),
+      child: buildCellItem(row, column)
+    );
+ }
+
+  Widget buildCellItem(int row, int column) {
+    if(row == this._playerPosition.y.round() && column == this._playerPosition.x.round())
+      return buildCurrentPositionMarker();
+    Object locatedObject = this.widget.virtualMap.getObject(column, row);
+    if(locatedObject is BeaconAnchor) {
+      return buildBeaconAnchorsMarker();
+    }
+    return buildEmptyCell();
+  }
+
+  Widget buildCircle(double size, Color color) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: new BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+      )
+    );
+  }
+
+  Widget buildCurrentPositionMarker() {
+    return buildCircle(5, Colors.red);
+  }
+
+  Widget buildBeaconAnchorsMarker() {
+    return buildCircle(5, Colors.black);
+  }
+
+  Widget buildEmptyCell() {
+    return Container(
+      padding: EdgeInsets.all(0.0),
+      margin: EdgeInsets.all(0.0), 
+      );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+}

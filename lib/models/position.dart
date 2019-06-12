@@ -24,11 +24,3 @@ class Position {
 
 }
 
-class LocalizedBeacon {
-  
-  Position position;
-  String uuid;
-
-  LocalizedBeacon(this.position, this.uuid);
-  
-}

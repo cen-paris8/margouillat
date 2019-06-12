@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
 import '../providers/firestore_provider.dart';
@@ -7,7 +5,6 @@ import '../providers/firebasestorage_provider.dart';
 import '../providers/localstorage_provider.dart';
 import '../models/game_model.dart';
 import '../models/step_model.dart';
-import 'package:path_provider/path_provider.dart';
 
 
 class GameRepository {

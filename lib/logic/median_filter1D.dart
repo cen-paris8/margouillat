@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:math';
 
 import 'package:using_bottom_nav_bar/logic/data_filter1D.dart';
 

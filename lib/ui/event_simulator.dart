@@ -1,6 +1,6 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:flutter_beacon/flutter_beacon.dart';
+import 'package:using_bottom_nav_bar/logic/beacon_manager.dart';
 import '../logic/event_manager.dart';
 
 class EventSimulator extends StatefulWidget {
@@ -26,7 +26,11 @@ class _EventSimulatorState extends State<EventSimulator> {
 
   void _sendBeaconEvent(String value) {
     print('Sending beacon event: $value');
-    _eventManager.addBeaconEvent(value);
+    RangingEvent be = new RangingEvent();
+    be.region = new Region(identifier: 'test');
+    Beacon b = new Beacon();
+    be.beacons.add(new BeaconModel.fromBeacon(b));
+    _eventManager.addBeaconEvent(be);
   }
 
   void _handleEvent(String data){

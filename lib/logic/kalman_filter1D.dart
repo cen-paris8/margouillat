@@ -29,7 +29,7 @@ class KalmanFilter1D {
     this.Q = q;
   }
 
-  /**
+  /*
   * Filter a new value
   * @param  {Number} z Measurement
   * @param  {Number} u Control

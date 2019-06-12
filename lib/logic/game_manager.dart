@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:using_bottom_nav_bar/logic/event_manager.dart';
 import 'package:using_bottom_nav_bar/logic/beacon_manager.dart';
+import 'package:using_bottom_nav_bar/logic/virtual_map.dart';
 import 'package:using_bottom_nav_bar/models/game_model.dart';
 import 'package:using_bottom_nav_bar/models/step_model.dart';
 import 'package:using_bottom_nav_bar/repositories/game_repository.dart';
@@ -44,6 +45,7 @@ class GameManager {
   final EventManager _eventManager = EventManager();
   final GameRepository _gameRepository = new GameRepository();
   StreamController _gameEventsController = new StreamController.broadcast();
+  VirtualMap _map;
 
   Stream get gameEventStream => _gameEventsController.stream;
 
@@ -59,6 +61,10 @@ class GameManager {
     ).then((model) =>
       this._startGame()
     );
+  }
+
+  void _initMap(int width, int height) {
+    _map = new VirtualMap(width, height);
   }
 
   void _handleUIEvent(var data){

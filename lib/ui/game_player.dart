@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:using_bottom_nav_bar/logic/game_manager.dart';
-import 'package:using_bottom_nav_bar/models/game_model.dart';
 import 'package:using_bottom_nav_bar/models/step_model.dart';
 import 'package:using_bottom_nav_bar/ui/event_simulator.dart';
 import 'package:using_bottom_nav_bar/ui/steps/debug.dart';
 import 'package:using_bottom_nav_bar/ui/steps/intro.dart';
 import 'package:using_bottom_nav_bar/ui/steps/mcq.dart';
 import 'package:flutter/foundation.dart';
-import 'dart:developer';
 
 class GamePlayer extends StatefulWidget {
 

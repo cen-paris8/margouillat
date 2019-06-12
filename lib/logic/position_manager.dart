@@ -1,16 +1,22 @@
-import 'dart:async';
+import 'dart:collection';
 import 'dart:math';
 
 import 'package:using_bottom_nav_bar/logic/beacon_manager.dart';
 import 'package:using_bottom_nav_bar/logic/event_manager.dart';
-import 'package:using_bottom_nav_bar/models/beacon_model.dart';
+import 'package:using_bottom_nav_bar/logic/kalman_filter1D.dart';
+import 'package:using_bottom_nav_bar/logic/virtual_map.dart';
+import 'package:using_bottom_nav_bar/models/position.dart';
 import 'package:using_bottom_nav_bar/repositories/beacon_repository.dart';
 
 class PositioningManager {
 
-  List<LocalizedBeacon> beacons;
+  List<BeaconAnchor> _beacons;
+  List<BeaconAnchorData> _beaconsData;
+  Queue<Position> _positions;
   final BeaconRepository _beaconRepository = BeaconRepository();
   final EventManager _eventManager = EventManager();
+  KalmanFilter1D xKFilter = new KalmanFilter1D(0.1, 2);
+  KalmanFilter1D yKFilter = new KalmanFilter1D(0.1, 2);
 
   static final PositioningManager _instance =
       new PositioningManager._internal();
@@ -20,37 +26,81 @@ class PositioningManager {
   }
 
   PositioningManager._internal(){
-    this.beacons = new List<LocalizedBeacon>();
+    _beacons = new List<BeaconAnchor>();
+    _beaconsData = new List<BeaconAnchorData>();
+    _positions = new Queue<Position>();
+    _init();
   }
 
   void _init() {
     // get beacon positions 
-    this.beacons = _beaconRepository.getLocalizedBeacons('dummy');
+    _beacons = _beaconRepository.getBeaconAnchors('dummyGameId');
+    for(BeaconAnchor lb in _beacons) {
+      BeaconAnchorData lbd = BeaconAnchorData.fromBeacon(lb);
+      _beaconsData.add(lbd);
+    }
     _eventManager.addBeaconEventListener(_handleBeaconEvent);
   }
 
-  void _handleBeaconEvent(RangingEvent event) {
-    for (BeaconModel b in event.beacons) {
-      if(_isRecognizedBeacon(b)) {
+  void _handleBeaconEvent(var event) {
+    for (BeaconModel bm in event.beacons) {
+      if(_isRecognizedBeacon(bm)) {
+        print("beacon recognized : ${bm.proximityUUID}");
+        BeaconAnchorData lbd = _beaconsData.singleWhere(
+          (b) => b.beacon.uuid.toLowerCase() == bm.proximityUUID.toLowerCase()
+        );
+        lbd.addSDistance(bm.accuracy);
       }
+    }
+    print("_beaconsData.length : ${_beaconsData.length}");
+    List<BeaconAnchorData> usefulData = _beaconsData.where(
+      (d) => !d.isEmpty
+    ).toList();
+    print("usefulData.length : ${usefulData.length}");
+    // TODO : before trilateration check the last distances are in the same time frame 
+    if(usefulData.length >= 3) { // minimum tree beacon anchors are required for trilateration
+      print('Calculating position');
+      Position position = calculatePosition(usefulData);
+      // TODO : better the filter
+      double filteredX = xKFilter.filter(position.x, 0);
+      double filteredY = yKFilter.filter(position.y, 0);
+      Position filteredPosition = new Position(filteredX, filteredY);
+      print('Position ${position.x};${position.y}');
+      print('Filtered position ${filteredPosition.x};${filteredPosition.y}');
+      this._addPosition(filteredPosition);
+      PositionEvent pEvent = new PositionEvent(DateTime.now(), filteredPosition);
+      //this._addPosition(position);
+      //PositionEvent pEvent = new PositionEvent(DateTime.now(), position);
+      _eventManager.addPositionEvent(pEvent);
     }
   }
 
   bool _isRecognizedBeacon(BeaconModel bm) {
     // TODO : implement BeaconModel equality operator
-    return this.beacons.any(
-      (b) => b.uuid == bm.proximityUUID
+    return _beaconsData.any(
+      (b) => b.beacon.uuid.toLowerCase() == bm.proximityUUID.toLowerCase()
     );
   }
 
+  void _addPosition(Position  position) {
+    _positions.add(position);
+  }
+
+  Position get currentPostion { return _positions.last; }
+
   // calculate a position using trilateration
   // other implementation : https://github.com/gheja/trilateration.js/blob/master/trilateration.js
-  Position calculatePosition(List<LocalizedBeaconData> beaconData) {
-    assert(beaconData.length == 3);
+  Position calculatePosition(List<BeaconAnchorData> beaconData) {
+    assert(beaconData.length >= 3);
     // if there is more than 3 beacons available, take the 3 closest
-    LocalizedBeaconData beacon1Data = beaconData[0];
-    LocalizedBeaconData beacon2Data = beaconData[1];
-    LocalizedBeaconData beacon3Data = beaconData[2];
+    // find the closest beacon
+    beaconData.sort(
+      (d1, d2) => d1.distance.compareTo(d2.distance)
+    );
+    BeaconAnchorData beacon1Data = beaconData[0];
+    BeaconAnchorData beacon2Data = beaconData[1];
+    BeaconAnchorData beacon3Data = beaconData[2];
+
     double xa = beacon1Data.beacon.position.x;
     double ya = beacon1Data.beacon.position.y;
     double xb = beacon2Data.beacon.position.x;
@@ -74,15 +124,28 @@ class PositioningManager {
 }
 
 
+class BeaconAnchorData {
 
-class LocalizedBeaconData {
+  BeaconAnchor beacon;
+  Queue<double> _distances = new Queue();
 
-  LocalizedBeacon beacon;
-  double distance;
+  BeaconAnchorData.fromBeacon(this.beacon);
 
-  LocalizedBeaconData(this.beacon, this.distance);
+  void addSDistance(double value) {
+    _distances.addLast(value);
+  }
 
-  LocalizedBeaconData.fromBeacon(this.beacon);
+  double get distance { return _distances.last; }
 
+  bool get isEmpty { return _distances.length == 0; }
+
+}
+
+class PositionEvent {
+
+  DateTime date;
+  Position position;
+
+  PositionEvent(this.date, this.position);
 
 }

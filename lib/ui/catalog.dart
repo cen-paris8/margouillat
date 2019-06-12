@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'game_card.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/game_model.dart';
-import 'package:flutter/foundation.dart';
-import 'dart:developer';
 import '../providers/firestore_provider.dart';
 
 class GameCatalog extends StatelessWidget {
