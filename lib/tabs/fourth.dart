@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:using_bottom_nav_bar/logic/virtual_map.dart';
 import 'package:using_bottom_nav_bar/repositories/beacon_repository.dart';
-import 'package:using_bottom_nav_bar/ui/map.dart';
+import 'package:using_bottom_nav_bar/ui/input_map.dart';
+import 'package:using_bottom_nav_bar/ui/game_map.dart';
+import 'package:using_bottom_nav_bar/ui/map_widget.dart';
 import '../ui/catalog.dart';
 import '../ui/catalogRx.dart';
 import '../ui/game_player.dart';
@@ -23,6 +25,8 @@ class FourthTab extends StatelessWidget {
     for(BeaconAnchor anchor in anchors) {
       vMap.addAnchorObject(anchor);
     }
-    return Map(virtualMap: vMap,);
+    VirtualMap emptyMap = new VirtualMap(10, 10);
+    return InputMap(virtualMap: emptyMap,);
+    //return MapWidget(virtualMap: vMap,);
   }
 }

@@ -7,46 +7,30 @@ import 'package:using_bottom_nav_bar/logic/position_manager.dart';
 import 'package:using_bottom_nav_bar/logic/virtual_map.dart';
 import 'package:using_bottom_nav_bar/models/position.dart';
 
-class Map extends StatefulWidget {
+class MapWidget extends StatefulWidget {
 
   @override
-  _MapState createState() => _MapState();
+  MapWidgetState createState() => MapWidgetState();
 
   VirtualMap virtualMap;
 
-  Map({Key key, this.virtualMap})
+  MapWidget({Key key, this.virtualMap})
     : super(key: key);
 }
 
-class _MapState extends State<Map> {
+class MapWidgetState extends State<MapWidget> {
 
-  final EventManager _eventManager = EventManager();
-  Position _playerPosition = new Position(0, 0);
-  BeaconManager beaconManager;
-  PositioningManager positionManager;
   double cellSize = 0;
   
   @override
   initState() {
     super.initState();
-    beaconManager = BeaconManager();
-    positionManager = PositioningManager();
-    _eventManager.addPositionEventListener(_processPosition);
-  }
-
-  void _processPosition(var event) {
-    print("Handling Position event in map");
-    if(this.mounted) {
-      setState(() {
-        _playerPosition = event.position;
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return new StreamBuilder(
-      stream: _eventManager.positionStream,
+      stream: null,
       builder: (context, snapshot) {
         //if (!snapshot.hasData) return new Text('Loading..');
         return Container ( 
@@ -67,10 +51,10 @@ class _MapState extends State<Map> {
   }
 
   double _getCellSize(maxHeight, nbRows, maxWidth, nbColumns) {
-    double maxCellHeight = maxHeight / nbRows;
+    double maxCellHeight = (maxHeight-(maxHeight*0.25)) / nbRows;
     double maxCellWidth = maxWidth / nbColumns;
     double size = min(maxCellHeight, maxCellWidth);
-    return size - 10;
+    return size;
   }
 
   Widget buildField(int nbRow, int nbColumn) {
@@ -129,12 +113,12 @@ class _MapState extends State<Map> {
  }
 
   Widget buildCellItem(int row, int column) {
-    if(row == this._playerPosition.y.round() && column == this._playerPosition.x.round())
-      return buildCurrentPositionMarker();
+    /*
     Object locatedObject = this.widget.virtualMap.getObject(column, row);
     if(locatedObject is BeaconAnchor) {
       return buildBeaconAnchorsMarker();
     }
+    */
     return buildEmptyCell();
   }
 
@@ -149,6 +133,7 @@ class _MapState extends State<Map> {
     );
   }
 
+  /*
   Widget buildCurrentPositionMarker() {
     return buildCircle(5, Colors.red);
   }
@@ -156,6 +141,7 @@ class _MapState extends State<Map> {
   Widget buildBeaconAnchorsMarker() {
     return buildCircle(5, Colors.black);
   }
+  */
 
   Widget buildEmptyCell() {
     return Container(

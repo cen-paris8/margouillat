@@ -41,6 +41,14 @@ class VirtualMap {
     _matrix[x][y] = anchor;
   }
 
+  void removeAnchor(int x, int y) {
+    Position p = new Position(x.toDouble(), y.toDouble());
+    anchors.removeWhere(
+      (a) => a.position == p
+    );
+    _matrix[x][y] = null;
+  }
+
   void addAnchorObject(BeaconAnchor anchor) {
     anchors.add(anchor);
     _matrix[anchor.position.x.round()][anchor.position.y.round()] = anchor;
