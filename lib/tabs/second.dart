@@ -89,10 +89,11 @@ StreamSubscription<LocationData> _locationSubscription;
       }
       location = null;
     }
-
-    setState(() {
-        _startLocation = location;
-    });
+    if(this.mounted) {
+      setState(() {
+          _startLocation = location;
+      });
+    }
     
 
   }

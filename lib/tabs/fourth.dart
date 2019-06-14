@@ -16,17 +16,20 @@ class FourthTab extends StatelessWidget {
   Widget build(BuildContext context) {
     //return GameCatalog();
     //return GameCatalogRx();
-    //return GamePlayer();
+    return GamePlayer();
     //return EventSimulator();
     // For test
+    /*
     BeaconRepository _beaconRepository = BeaconRepository();
     List<BeaconAnchor> anchors = _beaconRepository.getBeaconAnchors('dummyGameId');
     VirtualMap vMap = new VirtualMap(10, 16);
     for(BeaconAnchor anchor in anchors) {
       vMap.addAnchorObject(anchor);
     }
-    VirtualMap emptyMap = new VirtualMap(10, 10);
-    return InputMap(virtualMap: emptyMap,);
+    return GameMap(virtualMap: vMap,);
+    */
+    //VirtualMap emptyMap = new VirtualMap(10, 10);
+    //return InputMap(virtualMap: emptyMap,);
     //return MapWidget(virtualMap: vMap,);
   }
 }

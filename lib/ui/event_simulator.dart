@@ -34,8 +34,10 @@ class _EventSimulatorState extends State<EventSimulator> {
   }
 
   void _handleEvent(String data){
-    _receivedEvent = data;    
-    setState(() {});
+    _receivedEvent = data;
+    if(this.mounted) {   
+      setState(() {});
+    }
   }
 
   @override

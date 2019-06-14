@@ -102,8 +102,7 @@ class GameManager {
     );
     // TODO : check if the game use beacon
     // initialize beacon features
-    BeaconManager beaconManager = BeaconManager();
-    _eventManager.addBeaconEventHandler((data) => {
+    _eventManager.addPositionEventHandler((data) => {
       _handleBeaconEvent(data)
       }
     );

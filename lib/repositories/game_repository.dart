@@ -24,6 +24,7 @@ class GameRepository {
   }
 
   Observable<GameModel> getGame(String gameId) {
+    _localstorageProvider.createGameArborescence(gameId);
     Stream<DocumentSnapshot> sds = _firestoreProvider.getGame(gameId);
     Future<GameModel> game = sds.first.then(
      (ds) => _toFullGameModel(ds)

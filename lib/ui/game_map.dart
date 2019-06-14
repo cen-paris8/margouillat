@@ -28,6 +28,7 @@ class _GameMapState extends MapWidgetState {
   @override
   initState() {
     super.initState();
+    // Need to instantiate at least one time to make them start to listen and process beacons signals
     beaconManager = BeaconManager();
     positionManager = PositioningManager();
     _eventManager.addPositionEventListener(_processPosition);
